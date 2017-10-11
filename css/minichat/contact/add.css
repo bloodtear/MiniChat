@@ -1,0 +1,16 @@
+.new_contact {
+    height: 50px;
+    background-color: red;
+    line-height: 50px;
+    vertical-align: center;
+}
+
+.search_input {
+    background-color: #426ab3;
+    border: 0px;
+    line-height: 30px;
+    border-bottom: 1px solid white;
+    width: 80%;
+    color: whte;
+    padding: 0 20px 0 20px;
+}

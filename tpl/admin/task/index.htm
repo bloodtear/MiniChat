@@ -1,0 +1,224 @@
+<div id="page-wrapper">
+    <div class="clear">
+    <h3>任务列表 -- 项目名称：{:$project_title}
+    <a href='?admin/task/index&projectmuffinid={:$muffinid}&flag=1'><span class='fa fa-list'></a>
+    <a href='?admin/task/index&projectmuffinid={:$muffinid}&flag=0'></span><span class='fa fa-image'></span></a> 
+    <a href='?admin/task/new&muffinid={:$muffinid}'><button class='btn btn-success' style='display:inline-block; float: right;'>新建任务</button></a>
+    <a href='?admin/task/import&muffinid={:$muffinid}'><button class='btn btn-success' style='display:inline-block; float: right; margin-right: 15px;'>批量导入任务</button></a>
+    </h3>
+    <hr>
+    <?php
+    //var_dump($wechatusers);
+    //$ret = strpos('北京市市辖区','北京市');
+    //var_dump($ret);
+    
+    $show_status = array('未领取', '审核通过', '审核失败' ,'未审核', '已分派');
+    if (!empty($tasks)) {
+        if ($flag == 0) {
+            foreach ($tasks as $task) {
+                $muffinid = $task->muffinid();
+                $taskid = $task->id();
+                $title = $task->title();
+                $address = $task->address();
+                $content = $task->content();
+                $wechat_userid = $task->wechat_userid();
+                $location = $task->location();
+                $location = json_decode($location);
+                $province = $location->province->title;
+                $city = $location->city->title;
+                $district = $location->district->title;
+                $location_show = $province . " " . $city ." " . $district;
+                $status = $task->status();
+                $status_show = $show_status[$status];
+            ?>
+                <div class='task_elf' taskid='{:$taskid}' muffinid='{:$muffinid}'>
+                    <div class='task_info'>
+                        <div class='task_info_right'>
+                            <div class='title'>任务名称：{:$title}</div>
+                            <div class='location'>所属地址：{:$location_show}</div>
+                            <div class='address'>详细地址：{:$address}</div>
+                            <div class='content'>信息备注：{:$content}</div>
+                            <div class='content'>当前状态：{:$status_show}</div>
+                            <?php
+                            if (!empty($wechat_userid)) {
+                                $wechat_user = wechatuser::create($wechat_userid);
+                                $face = $wechat_user->face();
+                                $nick = $wechat_user->nick();
+                                ?>
+                                <div class=''>
+                                    <div style='display: inline-block;vertical-align: top;'>调查人员：</div>
+                                    <div style='display: inline-block;'>
+                                        <div class='center-block'><img style='width:80px;' src='{:$face}'></div>
+                                        <div class='text-center'>{:$nick}</div>
+                                    </div>
+                                </div>
+                                <?php
+                            }
+                            ?>
+                            <!--<div class='btn btn-default'>审核任务</div>-->
+                            <div>
+                                <div class='btn btn-default accept_btn' data-toggle="modal" data-target="#accept_modal">分派</div>
+                                <div class='btn btn-success broadcast_btn' data-toggle="modal" data-target="#broadCastModal">推送</div>
+                                <a href='?admin/task/new&taskid={:$muffinid}'><div class='btn btn-primary'>编辑</div></a>
+                                <div class='btn btn-danger del_btn' data-toggle="modal" data-target="#myModal">删除</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php
+            }
+        } else if ($flag == 1) {
+            ?>
+            <table class='table table-condensed' id='projects_table'>
+                <thead>
+                    <tr>
+                        <td>名称</td>
+                        <td>所属地址</td>
+                        <td>详细地址</td>
+                        <td>备注</td>
+                        <td>状态</td>
+                        <td>调查员</td>
+                        <td>操作</td>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php
+                foreach ($tasks as $task) {
+                    $muffinid = $task->muffinid();
+                    $taskid = $task->id();
+                    $title = $task->title();
+                    $address = $task->address();
+                    $content = $task->content();
+                    $wechat_userid = $task->wechat_userid();
+                    $location = $task->location();
+                    $location = json_decode($location);
+                    $province = $location->province->title;
+                    $city = $location->city->title;
+                    $district = $location->district->title;
+                    $location_show = $province . " " . $city ." " . $district;
+                    $status = $task->status();
+                    $status_show = $show_status[$status];
+                ?>
+                <tr class='task_elf' taskid='{:$taskid}' muffinid='{:$muffinid}'>
+                    <td>{:$title}</td>
+                    <td>{:$location_show}</td>
+                    <td>{:$address}</td>
+                    <td>{:$content}</td>
+                    <td>{:$status_show}
+                    </td>
+                    <td>
+                    <?php
+                    if (!empty($wechat_userid)) {
+                        $wechat_user = wechatuser::create($wechat_userid);
+                        $face = $wechat_user->face();
+                        $nick = $wechat_user->nick();
+                        ?>
+                        <div class=''>
+                            <div style='display: inline-block;vertical-align: top;'></div>
+                            <div style='display: inline-block;'>
+                                <div class='center-block'><img style='width:80px;' src='{:$face}'></div>
+                                <div class='text-center'>{:$nick}</div>
+                            </div>
+                        </div>
+                        <?php
+                    }
+                    ?>
+                    </td>
+                    <td>
+                        <div>
+                            <div style='margin-bottom: 10px;'  class='btn btn-default accept_btn' data-toggle="modal" data-target="#accept_modal">分派</div>
+                            <div style='margin-bottom: 10px;' class='btn btn-success broadcast_btn' data-toggle="modal" data-target="#broadCastModal">推送</div><br>
+                            <a href='?admin/task/new&taskid={:$muffinid}'><div class='btn btn-primary'>编辑</div></a>
+                            <div class='btn btn-danger del_btn' data-toggle="modal" data-target="#myModal">删除</div>
+                        </div>
+                    </td>
+                </tr>
+                <?php
+                }
+                ?>
+                </tbody>
+            </table>
+            <?php
+        }
+    } else{
+        ?>
+        <div>此项目下暂时无任务</div>
+        <?php
+    }
+    ?>
+    </div>
+</div>
+
+<!-- Modal     data-toggle="modal" data-target="#myModal"   -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">提示！</h4>
+      </div>
+      <div class="modal-body">
+        确认是要删除任务吗？
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-danger do_del">确认删除</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal     data-toggle="modal" data-target="#myModal"   -->
+<div class="modal fade" id="accept_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">想要分派给哪个调查员？</h4>
+      </div>
+      <div class="modal-body">
+        <?php
+        if (!empty($wechatusers)) {
+            foreach ($wechatusers as $wechatuser) {
+                $face = $wechatuser->face();
+                $nick = $wechatuser->nick();
+                $userid = $wechatuser->id();
+                ?>
+                <div class='investigator_div' userid="{:$userid}">
+                    <div class='center-block'><img style='width:80px;' src='{:$face}'></div>
+                    <div class='text-center'>{:$nick}</div>
+                </div>
+                <?php
+            }
+        }
+        ?>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger cancel_accept">撤消分派任务</button>
+        <!--<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>-->
+        <button type="button" class="btn btn-success do_accept">确认分派</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="broadCastModal" tabindex="-1" role="dialog" aria-labelledby="broadCastModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="broadCastModalLabel">请选择要推送到地其他区域<br><small>推送完成后，如下区域的调查员也可领取此任务</small></h4>
+      </div>
+      <div class="modal-body">
+          <div class='broadcast_area_list'></div>
+          <div class='btn btn-success more_loc_btn' style='margin-top: 15px;'>新增区域选择</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary save_locs_btn">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
