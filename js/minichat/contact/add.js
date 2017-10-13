@@ -44,7 +44,7 @@ $(document).ready(function (){
         __ajax('minichat.contact.add_friend', {add_userid: add_userid}, function(data){
             console.log(data);
             if (data.ret == 'success') {
-                go("minichat/contact/index");
+                document.location.href = "?minichat/contact/index";
             }
         });
         
