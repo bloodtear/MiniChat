@@ -27,19 +27,25 @@ class db_user extends database {
         return $this->get_all_table(TABLE_USERS);
     }
 
-    public function get_one_user($userid) {
+    public function one($userid) {
         $userid = (int)$userid;
         return $this->get_one_table(TABLE_USERS, "id = $userid");
     }
 
-    public function get_user($username) {
+    public function one_by_username($username) {
         $username = $this->escape($username);
         return $this->get_one_table(TABLE_USERS, "username = $username");
     }
 
-    public function add($username, $password) {
+    public function add($username, $nickname = '', $password, $face = '', $minino = '') {
         $now = time();
-        return $this->insert(TABLE_USERS, array("username" => $username, "password" => $password, "register_time" => $now));
+        $id = $this->insert(TABLE_USERS, array("username" => $username, "password" => $password, "nickname" => $nickname, "face" => $face, "register_time" => $now, "minino" => $minino, "status" => 0));
+        return db_contact::inst()->add($id);
+    }
+
+    public function modify($id, $username, $nickname, $password, $face, $minino, $token, $tokentime, $status) {
+        $now = time();
+        return $this->update(TABLE_USERS, array("username" => $username, "password" => $password, "nickname" => $nickname, "face" => $face, "minino" => $minino, "status" => $status, "token" => $token, "tokentime" => $tokentime), "id = '$id'");
     }
 
     public function update_login_time($userid) {

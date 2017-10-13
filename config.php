@@ -6,7 +6,7 @@ if (file_exists(dirname(__FILE__) . "/../PATH.php")) {
 
 include_once(dirname(__FILE__) . "/../framework/config.php");
 include_once(dirname(__FILE__) . "/app/database/db_user.class.php");
-// include_once(dirname(__FILE__) . "/app/database/db_settings.class.php");
+include_once(dirname(__FILE__) . "/app/database/db_contact.class.php");
 // include_once(dirname(__FILE__) . "/app/database/db_customers.class.php");
 // include_once(dirname(__FILE__) . "/app/database/db_muffininfos.class.php");
 // include_once(dirname(__FILE__) . "/app/database/db_questionnaires.class.php");
@@ -30,8 +30,9 @@ include_once(dirname(__FILE__) . "/app/thumbnail.php");
 // include_once(dirname(__FILE__) . "/app/questionnaires.class.php");
 // include_once(dirname(__FILE__) . "/app/questions.class.php");
 // include_once(dirname(__FILE__) . "/app/questionoptions.class.php");
-//include_once(dirname(__FILE__) . "/app/answers.class.php");
+include_once(dirname(__FILE__) . "/app/contact.class.php");
 include_once(dirname(__FILE__) . "/app/login.class.php");
+include_once(dirname(__FILE__) . "/app/user.class.php");
 // include_once(dirname(__FILE__) . "/app/sheet.class.php");
 // include_once(dirname(__FILE__) . "/app/location.class.php");
 // include_once(dirname(__FILE__) . "/app/question.class.php");
@@ -79,8 +80,10 @@ defined('MYSQL_COMMON') or define('MYSQL_COMMON', 'common_');
 // db_settings
 defined('TABLE_SETTINGS') or define('TABLE_SETTINGS', MYSQL_PREFIX . "settings");
 
-// db_user
+// db_users
 defined('TABLE_USERS') or define('TABLE_USERS', MYSQL_PREFIX . "users");
+// db_contacts
+defined('TABLE_CONTACTS') or define('TABLE_CONTACTS', MYSQL_PREFIX . "contacts");
 
 
 // mailer

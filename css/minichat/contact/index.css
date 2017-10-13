@@ -1,6 +1,35 @@
 .new_contact {
     height: 50px;
-    background-color: red;
+    background-color: #b2d235;
     line-height: 50px;
     vertical-align: center;
+    color: white;
+}
+
+.new_contact .fa {
+    line-height: 50px;
+    margin-left: 30px;
+    margin-right: 20px;
+}
+
+.new_contact > span {
+    line-height: 50px;
+}
+
+.new_contact > div {
+    display: inline-block;
+}
+
+.new_f {
+    vertical-align: top;
+}
+
+.contact_user {
+    height: 50px;
+    padding-left: 75px;
+    background-color: #f58220;
+    line-height: 50px;
+    vertical-align: center;
+    color: white;
+    margin-top:2px;
 }

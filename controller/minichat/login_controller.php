@@ -11,12 +11,12 @@ class login_controller {
     }
 
     public function get_salt_ajax() {
-        return get_session('login_salt');
+        return array('ret' => 'success', "salt" => get_session('login_salt'));
     }
     
     public function logout_action() {
         login::bye();
-        go("admin");
+        go("minichat/index/index");
     }
 
     public function login_ajax() {
@@ -36,15 +36,19 @@ class login_controller {
         $username = get_request_assert("username");
         $password = get_request_assert("password");
 
-        //$face = get_request_assert("face");
-
-        $u = db_user::inst()->get_user($username);
+        //$u = db_user::inst()->get_user($username);
+        $u = User::load_by_username($username);
         if (!empty($u)) {
             return "fail|用户名已被注册.";
         }
         
-        $ret = db_user::inst()->add($username, $password);
-        return $ret ? "success" : "fail|数据库操作失败，请稍后重试。";
+        
+        $user = new User();
+        $user->set_username($username);
+        $user->set_password($password);
+        $ret = $user->save();
+        
+        return $ret ? "success" : $ret;
         
         
 

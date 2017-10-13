@@ -1,14 +1,32 @@
 <div>
 <?php
 //var_dump($_SESSION);
+//var_dump($contact_list);
+//var_dump($contact_user_list);
 ?>
 </div>
 
 <div class='chat_header'> 联系人 </div>
 
 <div class='chat_body'>
-    <a href='?minichat/contact/add'><div class='new_contact'>
-        <span class='fa fa-plus-square-o fa-2x'></span>新的朋友
-    </div></a>
+        <a href='?minichat/contact/add'><div class='new_contact'>
+            <div class='fa fa-plus-square-o fa-2x'></div>
+            <div class='new_f'>新的朋友</div>
+        </div> </a>
+        <div class='contact_list'>
+        <?php
+            foreach ($contact_user_list as $contact_user) {
+                $username = $contact_user->username();
+            ?>
+            <div class='contact_user'>
+                <div class=''>{:$username}</div>
+            </div>
+            
+            
+            <?php
+            }
+        ?>
+        </div>
+   
 </div>
 

@@ -44,13 +44,17 @@ class db_init extends database {
         $this->exec($query);
         $this->exec("use " . MYSQL_DATABASE);
         
-        // setting
+        // settings
         $this->create_table(TABLE_SETTINGS,  array("name" => "TEXT", "value" => "TEXT"));
   
-        // user
+        // users
         $this->create_table(TABLE_USERS,  array("nickname" => "TEXT", "password" => "TEXT", "face" => "TEXT", 
 "register_time" => "TEXT", "minino" => "INT", "token" => "TEXT", "tokentime" => "TEXT"));
 
+        // contacts
+        $this->create_table(TABLE_CONTACTS,  array("userid" => "INT", "contact_list" => "TEXT", "star_list" => "TEXT", "black_list" => "TEXT", "add_list" => "TEXT", "stranger_list" => "TEXT"));
+
+        //
 
     }
 

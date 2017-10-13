@@ -14,3 +14,16 @@
     color: whte;
     padding: 0 20px 0 20px;
 }
+
+.rearched_user {
+    height: 50px;
+    background-color: #bed742;
+    color: white;
+    line-height: 50px;
+    padding-left: 30px;
+}
+
+.add_thiz_user {
+    margin-right: 30px;
+    margin-top: 8px;
+}

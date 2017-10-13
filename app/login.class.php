@@ -7,13 +7,14 @@ class login {
     public static function do_login($username, $cipher) {
         $salt = get_session("login_salt");
 
-        $user = db_user::inst()->get_user($username);
+        //$user = db_user::inst()->get_user($username);
+        $user = User::load_by_username($username);
         logging::d("Login", "user = " . dump_var($user, true));
         if ($user == null) {
             return "invalid username.";
         }
 
-        $password = $user["password"];
+        $password = $user->password();
         $c1 = md5($username. $salt . $password);
         logging::d("Login", "username = " . $username);
         logging::d("Login", "salt = " . $salt);
@@ -21,20 +22,22 @@ class login {
         logging::d("Login", "c1 = " . $c1);
         logging::d("Login", "cipher = " . $cipher);
         if ($c1 == $cipher) {
-            $_SESSION["user.id"] = $user["id"];
-            $_SESSION["user.name"] = $user["nickname"];
-            $_SESSION["user.username"] = $user["username"];
-            $_SESSION["user.face"] = mkUploadThumbnail($user["face"], 100, 100);
-            $_SESSION["user.large-face"] = $user["face"];
-            $_SESSION["user.last_login_time"] = $user["last_login_time"];
-            $_SESSION["user.admin"] = ($user["admin"] == "1");
-            $_SESSION["login.next"] = HOME_URL . "?main/main";
-            db_user::inst()->update_login_time($user["id"]);
+            $_SESSION["user.id"] = $user->id();
+            $_SESSION["user.name"] = $user->nickname();
+            $_SESSION["user.username"] = $user->username();
+            $_SESSION["user.detail"] = $user;
+            //$_SESSION["user.face"] = mkUploadThumbnail($user["face"], 100, 100);
+            //$_SESSION["user.large-face"] = $user["face"];
+            //$_SESSION["user.last_login_time"] = $user["last_login_time"];
+            $_SESSION["user.admin"] = ($user->admin() == "1");
+            //$_SESSION["login.next"] = HOME_URL . "?main/main";
+           // db_user::inst()->update_login_time($user["id"]);
 
-            $token = "l" . md5($user["id"] . uniqid());
-            db_user::inst()->update_login_token($user["id"], $token);
-
-            return array("ret" => "success", "refer" => '');
+            $token = "l" . md5($user->id() . uniqid());
+            $user->set_token($token);
+            $ret = $user->save();
+            
+            return $ret ? array("ret" => "success", "refer" => '') : array("ret" => "fail", "refer" => '');
             // jump to homepage after login.
             $refer = get_session("login.next");
             if ($refer == null) {
